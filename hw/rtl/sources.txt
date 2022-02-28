@@ -1,0 +1,8 @@
+afu.json
+
+C:../intel-fpga-bbb/samples/tutorial/05_virtual_addrs/base/hw/rtl/base_sources.txt 
+
++incdir+.
+afu.sv
+afu_memops.sv
+afu_regs.sv
