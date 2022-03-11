@@ -7,7 +7,7 @@ You can use the Intel-provided `fpgaconf` app to program the bitstream, for exam
 ```
 $ cd ~/Double-Trouble/hw/gbs/
 $ tar -xzvf afu_a10.tar.gz
-$ sudo fpgaconf -v afu_a10.gbs -B 0x3b
+$ fpgaconf afu_a10.gbs -B 0x3b
 ```
 
 Note that you may need to change the slot parameter (`-B 0x3b`) according to your system's configuration. 
