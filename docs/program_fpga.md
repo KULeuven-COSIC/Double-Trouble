@@ -5,7 +5,7 @@ An already synthesized bitstream is given for [Intel A10 PAC](https://www.intel.
 You can use the Intel-provided `fpgaconf` app to program the bitstream, for example:
 
 ```
-$ cd ~/double-trouble-package/hw/gbs/afu_a10.gbs
+$ cd ~/Double-Trouble/hw/gbs/
 $ tar -xzvf afu_a10.tar.gz
 $ sudo fpgaconf -v afu_a10.gbs -B 0x3b
 ```
