@@ -21,20 +21,19 @@ This file explains the experiment, how to run it, and what the expected results 
 
 The links in the table take you to the corresponding documentation.
 
-Experiment                                                         | Folder                | Section   | Notes              
--------------------------------------------------------------------|-----------------------|-----------|----------------------
-[Basic Functionality](./docs/basics.md)                            | sw/basic              |           |                    
-[Secondary Write](./docs/fig4_secondary_write.md)                  | sw/fig4               | Fig 4e    |                    
-[CPU Write](./docs/fig4_cpu_write.md)                              | sw/fig4               | Fig 4c    |                    
-[Shared Access & CPU Read](./docs/fig4_shared_access_cpu_read.md)  | sw/fig4               | Fig 4d,4f |                    
-[Cache Timing Histogram](./docs/cache_timing_histogram.md)         | sw/basic              | Apx B     |                    
-[Eviction Candidate](./docs/eviction_candidate.md)                 | sw/basic              | Sec 3.2.2 |                    
-[DDIO Replacement Policy](./docs/ddio_rep_policy.md)               | sw/basic              | Apx D     |                    
-[Eviction with Reduced EvSet](./docs/eviction_with_reduced_set.md) | sw/basic              | Sec 6.2   |                    
-[EvSet Const](./docs/evset_construction.md)                        | sw/evset_construction | Sec 8.1.1 |                    
-[DDIO/DDIO+ Reverse Engineering](./docs/ddio_reverse_eng.md)          | sw/ddio_reverse_eng   | Sec 5     |                    
+Experiment                                                         | Folder                | Section   |
+-------------------------------------------------------------------|-----------------------|-----------|
+[Basic Functionality](./docs/basics.md)                            | sw/basic              |           |
+[Secondary Write](./docs/fig4_secondary_write.md)                  | sw/fig4               | Fig 4e    |
+[CPU Write](./docs/fig4_cpu_write.md)                              | sw/fig4               | Fig 4c    |
+[Shared Access & CPU Read](./docs/fig4_shared_access_cpu_read.md)  | sw/fig4               | Fig 4d,4f |
+[Cache Timing Histogram](./docs/cache_timing_histogram.md)         | sw/basic              | Apx B     |
+[Eviction Candidate](./docs/eviction_candidate.md)                 | sw/basic              | Sec 3.2.2 |
+[DDIO Replacement Policy](./docs/ddio_rep_policy.md)               | sw/basic              | Apx D     |
+[Eviction with Reduced EvSet](./docs/eviction_with_reduced_set.md) | sw/basic              | Sec 6.2   |
+[EvSet Const](./docs/evset_construction.md)                        | sw/evset_construction | Sec 8.1.1 |
+[DDIO/DDIO+ Reverse Engineering](./docs/ddio_reverse_eng.md)       | sw/ddio_reverse_eng   | Sec 5     |
 
-<!-- Covert Channel                                                     | Initial/covert        | Sec 8.2   | Needs two bitstreams  -->
 
 ## Basics of API
 
