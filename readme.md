@@ -26,7 +26,7 @@ Experiment                                                         | Folder     
 [Basic Functionality](./docs/basics.md)                            | sw/basic              |           |                    
 [Secondary Write](./docs/fig4_secondary_write.md)                  | sw/fig4               | Fig 4e    |                    
 [CPU Write](./docs/fig4_cpu_write.md)                              | sw/fig4               | Fig 4c    |                    
-[Shared Access & CPU Read](./docs/fig4_cpu_read.md)                | sw/fig4               | Fig 4d,4f |                    
+[Shared Access & CPU Read](./docs/fig4_shared_access_cpu_read.md)  | sw/fig4               | Fig 4d,4f |                    
 [Cache Timing Histogram](./docs/cache_timing_histogram.md)         | sw/basic              | Apx B     |                    
 [Eviction Candidate](./docs/eviction_candidate.md)                 | sw/basic              | Sec 3.2.2 |                    
 [DDIO Replacement Policy](./docs/ddio_rep_policy.md)               | sw/basic              | Apx D     |                    
