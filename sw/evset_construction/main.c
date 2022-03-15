@@ -66,10 +66,6 @@ int main(int argc,char* argv[])
   ASSERT(fpga_connect_to_accel(AFU_ACCEL_UUID));
   fpga_share_buffer(shared_mem, SHARED_MEM_SIZE, &shared_mem_iova);
 
-  printf("  VA : 0x%0lx\n", (uint64_t)shared_mem              );
-  printf("  PA : 0x%0lx\n", (uint64_t)shared_mem_iova         );
-  printf(" CLA : 0x%0lx\n", (uint64_t)shared_mem_iova / CL(1) );
-
   //////////////////////////////////////////////////////////////////////////////
   // Define variables
 
@@ -83,55 +79,65 @@ int main(int argc,char* argv[])
   for (i=0; i<40000; i++)
     BUSY_WAIT();
 
-  //////////////////////////////////////////////////////////////////////////////
-  // Test with creating eviciton set with different configurations
-
-  // Each experiment with different target_index'es
-  int target_index = 0;
-  int threshold = evs_find_threshold(target_index);
-
-  int flags = 0;
-  int wrap_limit;
-
-  // Invoke stress app
-
-  char cmd_stress[80];
-  sprintf(cmd_stress, STRESS_COMMAND, arg_stress);
-
-  if (arg_stress != '0') {
-    (void)!system(cmd_stress);
-    printf("Stress with command: %s\n", cmd_stress);
-  }
-  else
-    printf("Continue with no stress\n");
-
-  // Apply page configuration according to arguments
-  if (arg_page == 'S')  {flags |= FPGA_CREATE_EVS_SMALL; wrap_limit =  10*16;}
-  else                  {flags |= FPGA_CREATE_EVS_HUGE;  wrap_limit = 100*16;}
-  // default: huge pages
-
-  // Apply test configuration according to arguments
-  if      (arg_config == 'S')   flags |= FPGA_CREATE_EVS_EN_TEST;
-  else if (arg_config == 'M') { flags |= FPGA_CREATE_EVS_EN_TEST;
-                                flags |= FPGA_CREATE_EVS_EN_TEST_MULTI; }
-  // default: no test at evset construction
-
   int multitest_count = 2;
   int retry_limit = 3;
   double time;
   int fail;
 
+  int flags = 0;
+  int wrap_limit;
+
+  int target_index = 0;
+  int threshold = evs_find_threshold(target_index);
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Invoke stress app
+
+  printf("\n [ ] Stress:\n");
+  
+  char cmd_stress[80];
+  sprintf(cmd_stress, STRESS_COMMAND, arg_stress);
+
+  if (arg_stress != '0') {
+    (void)!system(cmd_stress);
+    printf("     Stress with command: %s\n", cmd_stress);
+  }
+  else
+    printf("     No stress\n");
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Apply page configuration according to arguments
+
+  if (arg_page == 'S')  {flags |= FPGA_CREATE_EVS_SMALL; wrap_limit =  10*16;}
+  else                  {flags |= FPGA_CREATE_EVS_HUGE;  wrap_limit = 100*16;}
+  // default: huge pages
+
+  //////////////////////////////////////////////////////////////////////////////
+  // Apply test configuration according to arguments
+
+  if      (arg_config == 'S')   flags |= FPGA_CREATE_EVS_EN_TEST;
+  else if (arg_config == 'M') { flags |= FPGA_CREATE_EVS_EN_TEST;
+                                flags |= FPGA_CREATE_EVS_EN_TEST_MULTI; }
+  // default: no test at evset construction
+
 retry:
-  // Apply the configuration according to arguments
+  //////////////////////////////////////////////////////////////////////////////
+  // Apply DDIO configuration according to arguments
+
   if (arg_D!=DEFAULT_D)
     if (!setDDIO(arg_D)) goto error_ddio;
   for (i=0; i<40000; i++) BUSY_WAIT();
 
+  //////////////////////////////////////////////////////////////////////////////
   // Generate eviction set
+
   time = evs_create(target_index, threshold, WAIT, arg_D, wrap_limit, multitest_count, flags);
   fail = evs_check_error(flags, wrap_limit, EVS_VERBOSE);
 
-  if (fail != 1 && time != -1) {
+  //////////////////////////////////////////////////////////////////////////////
+  // Check the eviction set
+
+  if (fail == 0) {
 
     if (arg_stress != '0') {
       (void)!system("killall stress");
@@ -141,28 +147,33 @@ retry:
     uint64_t evset_sw[LLC_WAYS];
     uint64_t evset_hw[LLC_WAYS];
 
+    printf(GREEN"\n [+] An eviction set is constructed:\n\n"NC);
     int evs_len = evs_get(evset_sw, evset_hw, EVS_VERBOSE);
+
+    printf("\n     Construction time: %.2f ms\n", time);
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Check if there are false positives
+    
+    printf("\n [ ] The eviction set is tested (in SW):\n\n");
 
     // Revert to 2 DDIO ways
     if (arg_D!=DEFAULT_D)
       if (!setDDIO(2)) goto error_ddio;
     for (i=0; i<40000; i++) BUSY_WAIT();
 
-    int nb_faults_Old_WF = 
+    int nb_falsepositives = 
       evs_verify(target_index, threshold, evset_sw, evs_len, EVS_VERBOSE);
 
-    printf("\nStress %c Page %c Checks %c D %d  \n\nTime %.2f ms. Error Count: %d \n",
-      arg_stress, arg_page, arg_config, arg_D,
-      time, nb_faults_Old_WF);
+    printf("     Number of false positives: %d \n", nb_falsepositives);
   }
   else {
     if (retry_limit-- > 0) {
-      printf("Attempt failed. Retry.\n");
+      printf(RED"\n [-] An eviction set construction attempt failed. Retry\n"NC);
       goto retry;
     }
     else 
       goto error_const;
-      
   }
 
 goto finalize;
@@ -188,8 +199,6 @@ finalize:
     assert(setDDIO(2));
 
   fpga_close();
-  printf("\nFPGA Closed.\n");
-
 
   ASSERT(unmap_shared_mem(shared_mem, SHARED_MEM_SIZE));
   

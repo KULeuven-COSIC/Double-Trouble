@@ -64,23 +64,27 @@ Be careful with too big numbers as it can freeze your computer. It is advised to
 For each execution, the app constructs an eviction set and prints how long it took to do so. In addition, it applies a congruence test to report how many addresses were erroneously determined to be congruent.
 
 ```
- EA | HW ADDR     SW ADDR           |Err|Loop |Cycle|
-----|-------------------------------|---|-----|-----|
-  0 | 0x3f009800 0x00007f76c0260000 | 0 |   0 | 325 |
-  1 | 0x3f00d000 0x00007f76c0340000 | 0 |   0 | 327 |
-  2 | 0x3f013000 0x00007f76c04c0000 | 0 |   0 | 333 |
-  3 | 0x3f017800 0x00007f76c05e0000 | 0 |   0 | 327 |
-  4 | 0x3f01a800 0x00007f76c06a0000 | 0 |   0 | 326 |
-  5 | 0x3f01e000 0x00007f76c0780000 | 0 |   0 | 327 |
-  6 | 0x3f022000 0x00007f76c0880000 | 0 |   0 | 332 |
-  7 | 0x3f026800 0x00007f76c09a0000 | 0 |   0 | 322 |
-  8 | 0x3f02b800 0x00007f76c0ae0000 | 0 |   0 | 323 |
-  9 | 0x3f02f000 0x00007f76c0bc0000 | 0 |   0 | 323 |
- 10 | 0x3f031000 0x00007f76c0c40000 | 0 |   0 | 322 |
+ [+] An eviction set is constructed:
 
-Stress <stress_level> Page <page_type> Checks <congruence_check_type> D <DDIO_way_count>  
+ Evset Elem | HW ADDR     SW ADDR           |Retries|Access Time|
+ -----------|-------------------------------|-------|-----------|
+          0 | 0x01831000 0x00002aaac0c40000 |     2 |       322 |
+          1 | 0x0183c000 0x00002aaac0f00000 |     2 |       324 |
+          2 | 0x0184d800 0x00002aaac1360000 |     0 |       322 |
+          3 | 0x01857000 0x00002aaac15c0000 |     0 |       325 |
+          4 | 0x01866000 0x00002aaac1980000 |     0 |       328 |
+          5 | 0x01871800 0x00002aaac1c60000 |     0 |       321 |
+          6 | 0x0187c800 0x00002aaac1f20000 |     0 |       325 |
+          7 | 0x0188c000 0x00002aaac2300000 |     0 |       326 |
+          8 | 0x01896800 0x00002aaac25a0000 |     0 |       323 |
+          9 | 0x018a7800 0x00002aaac29e0000 |     0 |       329 |
+         10 | 0x018bd000 0x00002aaac2f40000 |     0 |       328 |
 
-Time 0.17 ms. Error Count: 0
+     Construction time: 0.19 ms
+
+ [ ] The eviction set is tested (in SW):
+
+     Number of false positives: 0 
 ```
 
 The collected results are evaluated in the Section 8.1.1 of paper, and summarised in Figure 8.

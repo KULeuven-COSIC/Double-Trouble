@@ -89,12 +89,12 @@ int evs_check_error(int flags, int wrap_count, int printFLAG) {
   int counter_wrap = ((debug>>32) & 0xFF) * 16;
   int evs_count  = (int)(debug & 0xFF);
 
-  if (printFLAG) {
-    printf("Check variables:\n");
-    printf(" Debug Reg    0x%" PRIx64 "\n", debug);
-    printf(" Wrap Count   %d\n", counter_wrap);
-    printf(" EVS Len      %d\n", evs_count);
-  }
+  // if (printFLAG) {
+  //   printf("Check variables:\n");
+  //   printf(" Debug Reg    0x%" PRIx64 "\n", debug);
+  //   printf(" Wrap Count   %d\n", counter_wrap);
+  //   printf(" EVS Len      %d\n", evs_count);
+  // }
     
   if (evs_count < 11)
     return 1;
@@ -114,8 +114,8 @@ int evs_get(uint64_t* eset_sw, uint64_t* eset_hw, int printFLAG) {
 
   if (printFLAG) {
     printf(
-" EA | HW ADDR     SW ADDR           |Err|Loop |Cycle|\n"\
-"----|-------------------------------|---|-----|-----|\n");
+" Evset Elem | HW ADDR     SW ADDR           |Retries|Access Time|\n"\
+" -----------|-------------------------------|-------|-----------|\n");
   }
 
   do {    
@@ -135,12 +135,11 @@ int evs_get(uint64_t* eset_sw, uint64_t* eset_hw, int printFLAG) {
     evs_len = cnt_evs;
 
     if (printFLAG) {
-      printf(" %2d | 0x%08lx 0x%016lx | %1d | %3d | %3d |\n", 
+      printf(" %10d | 0x%08lx 0x%016lx | %5d | %9d |\n", 
         cnt_evs,      
         eset_hw[cnt_evs],
         eset_sw[cnt_evs],
         cnt_fails,
-        cnt_loop,
         cnt_memop);
     }
 
@@ -176,7 +175,7 @@ int evs_verify(int target_index, int threshold, uint64_t* eset_sw, int len, int 
 
     if (!hwEvicted) {
       fault++;
-      if(printFLAG) printf("Fault1 at %d - 0x%016lx\n", i, eset_sw[i]);
+      if(printFLAG) printf("     Address %2d - 0x%016lx fails at 1. congruence test\n", i, eset_sw[i]);
     }  
 
 #if WITH_SECOND_TEST
@@ -196,7 +195,7 @@ int evs_verify(int target_index, int threshold, uint64_t* eset_sw, int len, int 
 
     if (!hwEvicted) {
       fault++;
-      if(printFLAG) printf("Fault2 at %d - 0x%016lx\n", i, eset_sw[i]);
+      if(printFLAG) printf("     Address %2d - 0x%016lx fails at 2. congruence test\n", i, eset_sw[i]);
     }  
 #endif
 
@@ -216,7 +215,7 @@ int evs_verify(int target_index, int threshold, uint64_t* eset_sw, int len, int 
 
     if (!hwEvicted) {
       fault++;
-      if(printFLAG) printf("Fault3 at %d - 0x%016lx\n", i, eset_sw[i]);
+      if(printFLAG) printf("     Address %2d - 0x%016lx fails at 3. congruence test\n", i, eset_sw[i]);
     }  
     
     if (fault!=0)
@@ -291,9 +290,10 @@ int evs_find_threshold(int target_index) {
   int timeTHR = (timeLLC + 3*timeRAM)/4;
   // int timeTHR = 320;
 
-  printf("Time LLC: %d\n", timeLLC);
-  printf("Time RAM: %d\n", timeRAM);
-  printf("Time THR: %d\n", timeTHR);
+  printf("\n [ ] HW's Data Access Thresholds:\n");
+  printf("     Time to Access LLC: %d\n", timeLLC);
+  printf("     Time to Access RAM: %d\n", timeRAM);
+  printf("     Time to Access THR: %d\n", timeTHR);
 
   return timeTHR;
 }
