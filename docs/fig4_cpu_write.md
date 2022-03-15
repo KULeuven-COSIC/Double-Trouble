@@ -1,4 +1,4 @@
-# Secondary Write 
+# CPU Write
 
 <p align="center" width="100%">
     <img width="500" src="./figure4.png"> 
