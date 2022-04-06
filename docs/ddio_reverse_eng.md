@@ -5,7 +5,7 @@
 </p>
 
 This code is used to reproduce the findings in Section 5: _Structure of the LLC set_. It has been tested on an Intel Xeon Silver 4208 (our local setup).
-install_msr_tools
+
 ## Initialization
 
 * [Program the FPGA](./program_fpga.md)
