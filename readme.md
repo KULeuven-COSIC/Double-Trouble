@@ -1,6 +1,6 @@
 # Double Trouble
 
-This repository provides a set of experiments for the paper *Double Trouble: Combined Heterogeneous Attacks on Non-Inclusive Cache Hierarchies* paper, to appear at *USENIX Security 2022*.
+This repository provides a set of experiments for the [paper](https://www.esat.kuleuven.be/cosic/publications/article-3437.pdf) *Double Trouble: Combined Heterogeneous Attacks on Non-Inclusive Cache Hierarchies*, to appear at *USENIX Security 2022*.
 
 
 ## Experiments
